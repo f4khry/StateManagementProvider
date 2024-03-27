@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testprovider/dark_mode/theme_provider.dart';
+import 'package:testprovider/l10n/l10n.dart';
 import 'package:testprovider/name/text_provider.dart';
 import 'package:testprovider/sample.dart';
 import 'package:testprovider/utils.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -22,6 +24,14 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<ThemeProvider>(builder: (context, theme, _) {
         return MaterialApp(
+          supportedLocales: l10n.all,
+          locale: Provider.of<TextProvider>(context).locale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           title: 'Flutter Demo',
           theme: theme.isDarkMode
               ? ThemeData.dark()
@@ -38,38 +48,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  @override
   Widget build(BuildContext context) {
     var theme = Provider.of<ThemeProvider>(context);
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Consumer<TextProvider>(builder: (context, tp, _) {
           return Text(tp.title);
         }),
@@ -77,30 +68,82 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
+            Text(
+              AppLocalizations.of(context)!.language,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              AppLocalizations.of(context)!.hello("Fakhry"),
+              style: const TextStyle(
+                fontSize: 30,
+              ),
+            ),
+            Text(
+              AppLocalizations.of(context)!.stateprovider,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Flexible(
-                child:
-                    Container(width: 100, color: Theme.of(context).cardColor)),
-            Flexible(child: Container(width: 100, color: Colors.red)),
-            Text("Text Test"),
+              child: Container(
+                color: Theme.of(context).cardColor,
+              ),
+            ),
             Image.network(
-                "https://preview.redd.it/02fhrcho5rl91.jpg?auto=webp&s=37008c0c5f6d240f78d9044c5873184891944e4b"),
+              "https://preview.redd.it/02fhrcho5rl91.jpg?auto=webp&s=37008c0c5f6d240f78d9044c5873184891944e4b",
+            ),
             TextFormField(),
-            Flexible(child: Container(width: 100, color: Colors.blue)),
+            Flexible(
+              child: Container(
+                width: 100,
+                color: Colors.yellow,
+              ),
+            ),
+            Flexible(
+              child: Container(
+                width: 100,
+                color: Colors.blue,
+              ),
+            ),
             ElevatedButton(
-                onPressed: () {
-                  go(context, SampleScreen());
-                },
-                child: const Text("Next Screen"))
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SampleScreen()),
+                );
+              },
+              child: const Text("Next Screen"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .toggleDarkMode();
+              },
+              child: Text(
+                // Change button text based on current theme status
+                'Toggle ${themeProvider.status} Mode',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Toggle between English and Arabic locales
+                Provider.of<TextProvider>(context, listen: false)
+                    .toggleLocale();
+              },
+              child: Text(
+                // Change button text based on current locale
+                Provider.of<TextProvider>(context).locale.languageCode == 'en'
+                    ? 'Switch to Arabic'
+                    : 'Switch to English',
+              ),
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          theme.toggleDarkMode();
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

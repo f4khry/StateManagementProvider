@@ -1,0 +1,31 @@
+{
+    "language": "English",
+    "@language":{
+        "description": "The current Language"
+    },
+    "stateprovider": "State Provider and localization",
+    "@stateprovider":{
+        "description": "implement localization"
+    },
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+        "description": "A programmer greeting"
+    },
+    "nextscreen": "next screen",
+    "@helloWorld": {
+        "description": "go to next screen"
+    },
+    "multiLanguage": "Multi Language",
+    "@multiLanguage":{
+        "description": "App title"
+    },
+    "hello": "Hello {username}",
+    "@hello":{
+        "description": "A Welcome message",
+        "placeholders":{
+            "username":{
+                "type":"String"
+                }
+            }
+        }
+}

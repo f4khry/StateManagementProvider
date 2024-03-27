@@ -1,0 +1,7 @@
+{
+    "language": "العربية",
+    "helloWorld":"مرحبا بالعالم!",
+    "multiLanguage": "متعدد اللغات",
+    "stateprovider": "مزود الدولة والتوطين",
+    "hello": "مرحبًا {username}"  
+}
