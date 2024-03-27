@@ -1,0 +1,1 @@
+ D:\\study\ la\ bodo\\degree\\intern\\localizationtest\\localizations_testing\\.dart_tool\\flutter_build\\8f1c87f5dd87315218f95381ec3fff4e\\native_assets.yaml: 
